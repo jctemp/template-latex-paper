@@ -1,0 +1,181 @@
+% !TeX root = paper.tex
+\documentclass[
+  % change depending on format
+  twoside,
+  % general settings
+  paper=a4,
+  fontsize=12pt,
+  parskip=half-,
+  headsepline,
+  headinclude]{scrreprt}
+
+%%  LaTex compilers
+% - https://tug.org/texlive/   (offline)
+% - https://miktex.org/        (offline)
+% - https://www.overleaf.com/  (online)
+
+%% handles input to latex compiler (can be omitted, but kept for compatibility reasons)
+\usepackage[utf8]{inputenc}
+
+%% font encoding
+\usepackage[T1]{fontenc}
+
+%% hyphenation, quotes, language support
+\usepackage[english, german]{babel}
+\usepackage{csquotes}
+
+%% Latin Modern family font type
+\usepackage{lmodern}
+
+%% inluce graphics like images in latex
+\usepackage{graphicx}
+
+%% links management for latex
+\usepackage{hyperref}
+
+%% create visually appealing tables
+\usepackage{booktabs}
+
+%% colour support for text
+\usepackage{xcolor}
+
+%% add sub tables, figure etc
+\usepackage{subcaption}
+
+%% math extensions for latex and symbols
+\usepackage{amsmath, amssymb, mathtools}
+
+%% include source code
+\usepackage{scrhack} % handle \float@addtolist
+\usepackage{listings}
+% \usepackage{minted} % might need -shell-escape as flag
+
+%% handling bibliography
+\usepackage{biblatex}
+
+%% include todos and dummy text
+\usepackage{todonotes}
+\usepackage{blindtext}
+
+%% Kopf- und Fußzeilen
+\usepackage[headsepline, footsepline, automark]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+
+
+% header and footer style
+\defpagestyle{paper-style}
+{% head definition
+{\headmark \hfill}
+{\hfill \headmark}
+{\hfill \headmark\hfill }
+(\textwidth,.4pt)
+}
+{% footer definition
+(\textwidth,.4pt)
+{\pagemark\hfill Vorname Name}
+{Version 0.1 vom \today \hfill \pagemark}
+{Version 0.1 vom \today\hfill\pagemark} 
+}
+\pagestyle{paper-style} 
+
+\raggedbottom
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}    % hier gehts los
+
+\selectlanguage{german}
+
+\thispagestyle{empty} % Titelseite
+\includegraphics[width=0.2\textwidth]{Wortmarke_WI_schwarz}
+
+{  ~ \sffamily
+  \vfill
+  {\Huge\bfseries Titel der Arbeit}
+  \bigskip
+
+  {\Large
+    Vorname Name \\[2ex]
+    Bachelor-Arbeit im Studiengang "`Angewandte Informatik"'
+    \\[5ex]
+    \today }
+}
+\vfill
+
+~ \hfill
+\includegraphics[height=0.3\paperheight]{H_WI_Pantone1665}
+
+\vspace*{-3cm}
+
+\newpage \thispagestyle{empty}
+\begin{tabular}{ll}
+  {\bfseries\sffamily Autor}         & Vorname Name                      \\
+                                     & Matrikelnummer                    \\
+                                     & dauerhafte email-Adresse          \\[5ex]
+  {\bfseries\sffamily Erstprüferin:} & Prof. Dr. Vorname Name            \\
+                                     & Abteilung Informatik, Fakultät IV \\
+                                     & Hochschule Hannover               \\
+                                     & email-Adresse                     \\[5ex]
+  {\bfseries\sffamily Zweitprüfer:}  & Prof. Dr. Vorname Name            \\
+                                     & Abteilung Informatik, Fakultät IV \\
+                                     & Hochschule Hannover               \\
+                                     & email-Adresse
+\end{tabular}
+
+\vfill
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Die folgende Lizenz kann die weitere Verwertung Ihrer Arbeit vereinfachen.
+% Wenn Sie Ihre Arbeit nicht unter dem genannten Lizenzvertrag lizenzieren
+% möchten, können Sie diesen Abschnitt entfernen.
+% Dies hat keinerlei Einfluss auf die Bewertung Ihrer Arbeit.
+Soweit nicht anders gekennzeichnet, ist dieses Werk unter einem
+Creative-Commons-Lizenzvertrag Namensnennung 4.0 lizenziert.
+Dies gilt nicht für Zitate und Werke, die aufgrund einer anderen Erlaubnis
+genutzt werden.
+Um die Bedingungen der Lizenz einzusehen, folgen Sie bitte dem Hyperlink:\\
+\url{https://creativecommons.org/licenses/by/4.0/deed.de}
+
+\vfill
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center} \sffamily\bfseries Selbständigkeitserklärung \end{center}
+% fett und zentriert in der minipage
+
+Hiermit erkläre ich, dass ich die eingereichte Bachelor-Arbeit
+selbständig und ohne fremde Hilfe verfasst, andere als die von mir angegebenen Quellen
+und Hilfsmittel nicht benutzt und die den benutzten Werken wörtlich oder
+inhaltlich entnommenen Stellen als solche kenntlich gemacht habe.
+\vspace*{7ex}
+
+Hannover, den \today \hfill Unterschrift
+\pdfbookmark[0]{Inhalt}{contents}
+\tableofcontents  % Inhaltsverzeichnis
+
+\listoffigures      % Abbildungsverzeichnis
+
+\listoftables       % Tabellenverzeichnis
+
+\blinddocument  % Text
+
+Okay das ist ein "Test".
+
+\todo{More content...}
+
+%\input{abkuerz.tex}      % Einbinden von Tex-Files
+%\input{einfuehrung.tex}
+%
+%\include{normen}        % Einbinden von größeren Tex-Files,z.B. Kapiteln
+%\include{aufbau}
+%\include{zitieren}
+%\include{form}
+%\include{allgtips}
+%
+%\bibliographystyle{alpha}  % Schlüssel als Buchstaben
+%\bibliography{thesis}      % Literaturverzeichnis
+
+\end{document}
+
+
