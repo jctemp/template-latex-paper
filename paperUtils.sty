@@ -1,0 +1,119 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{paperUtils}[2022 Custom Package]
+
+% === Packages ================================================================
+
+%% handles input to latex compiler
+% (can be omitted, but kept for compatibility reasons)
+\RequirePackage[utf8]{inputenc}
+
+%% font encoding
+\RequirePackage[T1]{fontenc}
+
+%% hyphenation, quotes, language support
+\RequirePackage[german, english]{babel}
+\RequirePackage{csquotes}
+
+%% Latin Modern family font type
+\RequirePackage{lmodern}
+
+%% inluce graphics like images in latex
+\RequirePackage{graphicx}
+
+%% links management for latex
+\RequirePackage{hyperref}
+
+%% create visually appealing tables
+\RequirePackage{booktabs}
+
+%% colour support for text
+\RequirePackage{xcolor}
+
+%% add sub tables, figure etc
+\RequirePackage{subcaption}
+
+%% math extensions for latex and symbols
+\RequirePackage{amsmath, amssymb, mathtools}
+
+%% include source code
+\RequirePackage{scrhack} % handle \float@addtolist
+\RequirePackage{minted} % might need -shell-escape as flag
+%\RequirePackage{listings}
+
+%% handling bibliography
+\RequirePackage[style=alphabetic]{biblatex}
+
+%% include todos and dummy text
+% \RequirePackage{todonotes} % include add todo marker in text
+\RequirePackage{blindtext}
+
+%% customise header and footer 
+\RequirePackage[headsepline, footsepline, automark]{scrlayer-scrpage}
+
+%% control flow
+\RequirePackage{etoolbox}
+
+% === DynamicCommand ===========================================================
+% First ingredient is the the \csname and \endcsname commands.
+% Words written inbetween these two are interpreted as a
+% commands, e.g.
+% 
+%   \LaTeX => \csname LaTeX\endcsname
+% 
+% To create command, one need the \expandafter marco to delay
+% an expansion, e.g.
+% 
+%   \expandafter\def\csname LaTeX\endcsname
+% 
+% \def is delayed util \csname ... \endscname is evaluated and
+% this allow to evaluate strings dynamically.
+% 
+
+% {Basename}{Postfix}{Number inputs}
+\newcommand{\newDynamicCommand}[3]{
+    \expandafter\newcommand\csname #1#2\endcsname[#3]
+}
+\newcommand{\renewDynamicCommand}[3]{
+    \expandafter\renewcommand\csname #1#2\endcsname[#3]
+}
+\newcommand{\nameDynamicCommand}[2]{
+    \csname #1#2\endcsname
+}
+
+% variant
+\newcommand{\paperVariable}[2]{
+    \newDynamicCommand{paper}{#1}{0}{#2}
+}
+
+% === Named Option Commands ===================================================
+\newcommand{\option}[3]{
+    \ifnumequal{#1}{1}{#2}{#3}
+}
+
+\newcommand{\commandNamePrefix}{option}
+\newcommand{\optionEnable}[1]{
+    \renewDynamicCommand{\commandNamePrefix}{#1}{0}{1}
+}
+\newcommand{\optionDisable}[1]{
+    \renewDynamicCommand{\commandNamePrefix}{#1}{0}{0}
+}
+\newcommand{\optionCreate}[1]{
+    \newDynamicCommand{\commandNamePrefix}{#1}{0}{0}
+}
+\newcommand{\optionCheck}[3]{
+    \option{\nameDynamicCommand{\commandNamePrefix}{#1}}{#2}{#3}
+}
+
+% === General =================================================================
+
+\newcommand{\declarationEntry}[2]{{\bfseries\sffamily #1:} #2 \\ [5ex]}
+
+\newcommand{\numbering}[2][1]{
+    \clearpage
+    \setcounter{page}{#1}
+    \pagenumbering{#2}
+}
+
+\newcommand{\chapterEntry}[1]{
+    \include{#1}
+}

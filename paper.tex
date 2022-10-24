@@ -1,7 +1,7 @@
 % !TeX root = paper.tex
 \documentclass[
-  % change depending on format
-  twoside,
+  % change depending on format (oneside|twoside)
+  oneside,
   % general settings
   paper=a4,
   fontsize=12pt,
@@ -14,167 +14,154 @@
 % - https://miktex.org/        (offline)
 % - https://www.overleaf.com/  (online)
 
-%% handles input to latex compiler (can be omitted, but kept for compatibility reasons)
-\usepackage[utf8]{inputenc}
+%% contains custom commands and required packages
+\usepackage{paperUtils}
 
-%% font encoding
-\usepackage[T1]{fontenc}
+% ============================================================================= 
+% Init. Options
 
-%% hyphenation, quotes, language support
-\usepackage[english, german]{babel}
-\usepackage{csquotes}
+\optionCreate{Declaration}
+\optionCreate{Abstract}
+\optionCreate{Acknowledgment}
 
-%% Latin Modern family font type
-\usepackage{lmodern}
+\optionCreate{DeclarationCreativeCommon}
+\optionCreate{DeclarationExaminer}
 
-%% inluce graphics like images in latex
-\usepackage{graphicx}
+\optionCreate{TitlePageSubtitle}
+\optionCreate{TitlePageAdditional}
 
-%% links management for latex
-\usepackage{hyperref}
+% ============================================================================= 
+% == BEGIN: settings 
 
-%% create visually appealing tables
-\usepackage{booktabs}
+% title of the dissertation
+\paperVariable{Title}{Titel der Arbeit}
 
-%% colour support for text
-\usepackage{xcolor}
+% name of the author
+\paperVariable{Author}{Vorname Nachname}
 
-%% add sub tables, figure etc
-\usepackage{subcaption}
+% language of the paper (english, german)
+\paperVariable{Language}{english}
 
-%% math extensions for latex and symbols
-\usepackage{amsmath, amssymb, mathtools}
+% abstract of the paper
+\optionEnable{Abstract}
 
-%% include source code
-\usepackage{scrhack} % handle \float@addtolist
-\usepackage{listings}
-% \usepackage{minted} % might need -shell-escape as flag
+% acknowledgments of the paper
+\optionEnable{Acknowledgment}
 
-%% handling bibliography
-\usepackage{biblatex}
+% title page modifications
+\optionDisable{TitlePageSubtitle}
+\paperVariable{Subtitle}{Untertitel der Arbeit}
 
-%% include todos and dummy text
-\usepackage{todonotes}
-\usepackage{blindtext}
+\optionDisable{TitlePageAdditional}
+\paperVariable{Additional}{Studiengang \enquote{Angewandte Informatik}}
 
-%% Kopf- und Fußzeilen
-\usepackage[headsepline, footsepline, automark]{scrlayer-scrpage}
+% declaration of authorship file
+\optionEnable{Declaration}
+\optionDisable{DeclarationCreativeCommon}
+\paperVariable{Entries}{
+  \declarationEntry{Autor}{
+    & \paperAuthor   \\
+    & Matrikelnummer \\
+    & e-mail Adresse
+  }
+  \declarationEntry{Erstprüfer}{
+    & Prof. Dr. Vorname Name \\
+    & Abteilung Informatik, Fakultät IV \\
+    & Hochschule Hannover \\
+    & e-mail Adresse
+  }
+  \declarationEntry{Zweitprüfer}{
+    & Prof. Dr. Vorname Name \\
+    & Abteilung Informatik, Fakultät IV \\
+    & Hochschule Hannover \\
+    & e-mail Adresse
+  }
+}
+
+% chapters
+\paperVariable{Chapters}{
+  \include{layout/intoduction.tex}
+}
+
+% appendix
+\paperVariable{Appendix}{
+  \include{layout/appendix/example.tex}
+}
+
+% == END: settings 
+% =============================================================================
+
+% ============================================================================= 
+% Additional Setting
+
+% include paths
+\graphicspath{{assets}{assets/base}{assets/docs}{assets/images}}
+
+% reference latex bib
+\addbibresource{layout/references.bib}
+
+% ============================================================================= 
+% Styling
+
 \pagestyle{scrheadings}
 
+\ihead{} % header left
+\chead{\headmark} % header mid
+\ohead{} % header right
 
-% header and footer style
-\defpagestyle{paper-style}
-{% head definition
-{\headmark \hfill}
-{\hfill \headmark}
-{\hfill \headmark\hfill }
-(\textwidth,.4pt)
-}
-{% footer definition
-(\textwidth,.4pt)
-{\pagemark\hfill Vorname Name}
-{Version 0.1 vom \today \hfill \pagemark}
-{Version 0.1 vom \today\hfill\pagemark} 
-}
-\pagestyle{paper-style} 
+\ifoot{} % footer left 
+\cfoot{} % footer mid
+\ofoot{\pagemark} % footer right
 
 \raggedbottom
 \renewcommand{\topfraction}{1}
 \renewcommand{\bottomfraction}{1}
 
- 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{document}    % hier gehts los
+% ============================================================================= 
+% Document
 
-\selectlanguage{german}
+\begin{document}
 
-\thispagestyle{empty} % Titelseite
-\includegraphics[width=0.2\textwidth]{Wortmarke_WI_schwarz}
+\selectlanguage{\paperLanguage}
 
-{  ~ \sffamily
-  \vfill
-  {\Huge\bfseries Titel der Arbeit}
-  \bigskip
+% roman page number
+\numbering{roman}
 
-  {\Large
-    Vorname Name \\[2ex]
-    Bachelor-Arbeit im Studiengang "`Angewandte Informatik"'
-    \\[5ex]
-    \today }
-}
-\vfill
+\include{layout/preamble/title_page.tex}
 
-~ \hfill
-\includegraphics[height=0.3\paperheight]{H_WI_Pantone1665}
+\optionCheck{Declaration}{
+  \include{layout/preamble/declaration.tex}
+}{}
 
-\vspace*{-3cm}
+\optionCheck{Abstract}{
+  \include{layout/preamble/abstract.tex}
+}{}
 
-\newpage \thispagestyle{empty}
-\begin{tabular}{ll}
-  {\bfseries\sffamily Autor}         & Vorname Name                      \\
-                                     & Matrikelnummer                    \\
-                                     & dauerhafte email-Adresse          \\[5ex]
-  {\bfseries\sffamily Erstprüferin:} & Prof. Dr. Vorname Name            \\
-                                     & Abteilung Informatik, Fakultät IV \\
-                                     & Hochschule Hannover               \\
-                                     & email-Adresse                     \\[5ex]
-  {\bfseries\sffamily Zweitprüfer:}  & Prof. Dr. Vorname Name            \\
-                                     & Abteilung Informatik, Fakultät IV \\
-                                     & Hochschule Hannover               \\
-                                     & email-Adresse
-\end{tabular}
+\optionCheck{Acknowledgment}{
+  \include{layout/preamble/acknowledgment.tex}
+}{}
 
-\vfill
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Die folgende Lizenz kann die weitere Verwertung Ihrer Arbeit vereinfachen.
-% Wenn Sie Ihre Arbeit nicht unter dem genannten Lizenzvertrag lizenzieren
-% möchten, können Sie diesen Abschnitt entfernen.
-% Dies hat keinerlei Einfluss auf die Bewertung Ihrer Arbeit.
-Soweit nicht anders gekennzeichnet, ist dieses Werk unter einem
-Creative-Commons-Lizenzvertrag Namensnennung 4.0 lizenziert.
-Dies gilt nicht für Zitate und Werke, die aufgrund einer anderen Erlaubnis
-genutzt werden.
-Um die Bedingungen der Lizenz einzusehen, folgen Sie bitte dem Hyperlink:\\
-\url{https://creativecommons.org/licenses/by/4.0/deed.de}
-
-\vfill
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{center} \sffamily\bfseries Selbständigkeitserklärung \end{center}
-% fett und zentriert in der minipage
-
-Hiermit erkläre ich, dass ich die eingereichte Bachelor-Arbeit
-selbständig und ohne fremde Hilfe verfasst, andere als die von mir angegebenen Quellen
-und Hilfsmittel nicht benutzt und die den benutzten Werken wörtlich oder
-inhaltlich entnommenen Stellen als solche kenntlich gemacht habe.
-\vspace*{7ex}
-
-Hannover, den \today \hfill Unterschrift
+% auto generation of figures and chapters 
 \pdfbookmark[0]{Inhalt}{contents}
-\tableofcontents  % Inhaltsverzeichnis
+\tableofcontents
+\listoffigures
+\listoftables
 
-\listoffigures      % Abbildungsverzeichnis
+% arabic page number
+\numbering{arabic}
 
-\listoftables       % Tabellenverzeichnis
+% chapter files
+\paperChapters
 
-\blinddocument  % Text
+% start appendix
+\clearpage
+\appendix
 
-Okay das ist ein "Test".
+% appendix files
+\paperAppendix
 
-\todo{More content...}
-
-%\input{abkuerz.tex}      % Einbinden von Tex-Files
-%\input{einfuehrung.tex}
-%
-%\include{normen}        % Einbinden von größeren Tex-Files,z.B. Kapiteln
-%\include{aufbau}
-%\include{zitieren}
-%\include{form}
-%\include{allgtips}
-%
-%\bibliographystyle{alpha}  % Schlüssel als Buchstaben
-%\bibliography{thesis}      % Literaturverzeichnis
+% display references
+\printbibliography
 
 \end{document}
 
